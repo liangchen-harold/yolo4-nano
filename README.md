@@ -6,7 +6,11 @@ YOLOv4-nano is a series of improvements on AlexeyAB's YOLOv4 with darknet:
 3. An easy to use Makefile system
 
 ## Pre requires
-Ubuntu 18.04 with Nvidia GPU driver and CUDA 10.0 installed, tested on GTX 1660Ti (DELL G3 3590) / T4 / V100
+1. Ubuntu 18.04 with Nvidia GPU driver and CUDA 10.0 installed, tested on GTX 1660Ti (DELL G3 3590) / T4 / V100
+2. OpenCV-dev 3.x
+``` sh
+sudo apt install libopencv-dev
+```
 
 ## Getting start
 ``` sh
@@ -37,6 +41,9 @@ The default detection classes is cat and dog, if you want train the model to det
 CLS=cat dog
 
 ``` sh
+# if you changed the CLS value in Makefile, you need to run this again:
+make data
+
 # train the model
 make train
 ```
