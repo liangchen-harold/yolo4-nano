@@ -66,5 +66,5 @@ validation:
 
 inference:
 	cd $(RESULTS)/$(VERSION_YOLO) && ../../darknet/build-release/darknet detector demo coco.data yolov4.cfg yolov4_best.weights ../../test.mp4 -prefix pictures
-	ffmpeg -i pictures_%08d.jpg test-result.mp4
-	rm pictures_*.jpg
+	cd $(RESULTS)/$(VERSION_YOLO) && ffmpeg -i pictures_%08d.jpg -vf drawtext="text='YOLOv4-nano"$(_NANO)"': fontcolor=white: fontsize=24: box=1: boxcolor=black@0.8: boxborderw=5: x=2: y=2" test-result.mp4
+	cd $(RESULTS)/$(VERSION_YOLO) && rm pictures_*.jpg
