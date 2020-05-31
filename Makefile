@@ -62,9 +62,9 @@ train:
 	# -dont_show -json_port 8070 -ext_output -mjpeg_port 8090
 
 validation:
-	cd $(RESULTS)/$(VERSION_YOLO) && ./darknet/build-release/darknet detector map coco.data yolov4.cfg yolov4_best.weights -points 101
+	cd $(RESULTS)/$(VERSION_YOLO) && ../../darknet/build-release/darknet detector map coco.data yolov4.cfg yolov4_best.weights -points 101
 
 inference:
-	cd $(RESULTS)/$(VERSION_YOLO) && ./darknet/build-release/darknet detector demo coco.data yolov4.cfg yolov4_best.weights ../../test.mp4 -prefix pictures
+	cd $(RESULTS)/$(VERSION_YOLO) && ../../darknet/build-release/darknet detector demo coco.data yolov4.cfg yolov4_best.weights ../../test.mp4 -prefix pictures
 	ffmpeg -i pictures_%08d.jpg test-result.mp4
 	rm pictures_*.jpg

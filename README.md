@@ -49,5 +49,5 @@ make validation
 make inference
 ```
 
-## more infomation
+## More infomation
 blog page: https://cs.lcsky.org/?p=342
