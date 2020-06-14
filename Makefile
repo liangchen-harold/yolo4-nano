@@ -1,5 +1,5 @@
 # author: liangchen (https://cs.lcsky.org)
-.PHONY: all train inference validation data install
+.PHONY: all train inference validation data install convert pb
 
 # 数据集 | dataset
 DATA=datasets/coco2017
@@ -129,3 +129,11 @@ inference:
 	cd $(RESULTS)/$(VERSION_YOLO) && ffmpeg -i pictures_%08d.jpg -vf drawtext="text='YOLOv4"$(VAR)"': fontcolor=white: fontsize=24: box=1: boxcolor=black@0.8: boxborderw=5: x=2: y=2" result-$(INFERENCE_FILE)
 	cd $(RESULTS)/$(VERSION_YOLO) && rm pictures_*.jpg
 	nautilus $(RESULTS)/$(VERSION_YOLO) &
+
+pb:
+	cd $(RESULTS)/$(VERSION_YOLO) && cat yolov4.cfg | awk -F "[=]" '{if ($$1=="anchors ") print($$2)}' > anchors.txt
+	cd $(RESULTS)/$(VERSION_YOLO) && CUDA_VISIBLE_DEVICES= python3 ../../src/keras-yolo4-converter/convert.py --alpha $(NANO) --model_path yolov4_best.weights --anchors_path anchors.txt --classes_path coco.names --output_layer_file outputs.txt -o yolov4_best.h5
+	# cd $(RESULTS)/$(VERSION_YOLO) && CUDA_VISIBLE_DEVICES= python3 ../../src/keras-yolo4-converter/test.py --alpha $(NANO) --model_path yolov4_best.h5 --anchors_path anchors.txt --classes_path coco.names
+
+convert: pb
+	cd $(RESULTS)/$(VERSION_YOLO) && bash -c "source ~/vsenv/bin/activate && CUDA_VISIBLE_DEVICES= python3 ~/vsenv/lib/python3.6/site-packages/ncsdk/mvNCCompile.py yolov4_best.pb -in input_1 -on `cat outputs.txt` --ma2480 -s 2 -o $(VERSION_YOLO).blob -i $(shell cat $(YOLO_DATA)/val.txt|head -n 1) | grep stage > convert.txt"

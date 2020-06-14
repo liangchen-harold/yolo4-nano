@@ -14,7 +14,7 @@ sudo apt install libopencv-dev
 
 ## 起步
 ``` sh
-git clone https://github.com/liangchen-harold/yolo4-nano.git
+git clone https://github.com/liangchen-harold/yolo4-nano.git --recursive
 cd yolo4-nano
 make install
 ```
@@ -39,6 +39,8 @@ datasets/
 默认的检测类别是😺和🐶，如果你想训练自己的类别，自己改动Makefile的第9行：
 
 CLS=cat dog
+
+默认模型通道缩放比例NANO=0.125，weights文件大小仅3.9MB，推理速度比原版快4~6倍，自己改动Makefile的第17行，选择合适的缩放比例，详细数据请参考[这里](https://cs.lcsky.org/?p=342)。
 
 ``` sh
 # 如果你改动过CLS，需要重新运行：
@@ -75,7 +77,7 @@ sudo apt install libopencv-dev
 
 ## Getting start
 ``` sh
-git clone https://github.com/liangchen-harold/yolo4-nano.git
+git clone https://github.com/liangchen-harold/yolo4-nano.git --recursive
 cd yolo4-nano
 make install
 ```
@@ -100,6 +102,8 @@ datasets/
 The default detection classes is cat and dog, if you want train the model to detect other target, modify line 9 of the Makefile
 
 CLS=cat dog
+
+The default channel multiplier factor NANO=0.125, the size of weights file is only 3.9MB, and the inference speed is 4~6x faster than the original YOLOv4, modify line 17 of the Makefile to choose the factor. For more experiments data please reference [here](https://cs.lcsky.org/?p=342).
 
 ``` sh
 # if you changed the CLS value in Makefile, you need to run this again:

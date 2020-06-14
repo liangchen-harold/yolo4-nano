@@ -1,0 +1,3 @@
+[submodule "src/keras-yolo4-converter"]
+	path = src/keras-yolo4-converter
+	url = git@github.com:liangchen-harold/keras-yolo4-converter.git
