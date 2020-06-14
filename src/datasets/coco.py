@@ -7,8 +7,10 @@ from pycocotools.coco import COCO
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", help = "Path to instances_train2017.json or instances_val2017.json")
+    parser.add_argument("--image_folder", help = "Path to original image folder")
     parser.add_argument("--out", default = "", help = "The output folder")
     parser.add_argument("--cls", nargs='*', type=str, default=['cat'], help = "The catalogues you want")
+    parser.add_argument("--skip", nargs='*', type=int, default=[], help = "The skip count per catalogues")
 
     args = parser.parse_args()
     coco_json_path = args.json
@@ -26,8 +28,12 @@ if __name__ == "__main__":
 
     cat_ids = coco.getCatIds(catNms=args.cls)
     img_ids = []
-    for cat_id in cat_ids:
-        img_ids += coco.getImgIds(catIds=[cat_id])
+    for i, cat_id in enumerate(cat_ids):
+        ids = coco.getImgIds(catIds=[cat_id])
+        if (len(args.skip) > i):
+            ids = ids[::args.skip[i]]
+        img_ids += ids
+        print(img_ids)
     img_ids = list(set(img_ids))
     for img_id in img_ids:
         # image path
@@ -59,6 +65,11 @@ if __name__ == "__main__":
                         cat_id = cat_ids.index(cat_id)
                         content += str(cat_id) + " " + " ".join([str(a) for a in bbox]) + '\n'
             if (len(content) > 0):
-                yolo_data_filename = "{}/{}.txt".format(out_folder, name)
+                # yolo_data_filename = "{}/{}.txt".format(out_folder, name)
+                yolo_data_filename = "{}/{}.txt".format(out_folder, img[0]['id'])
                 yolo_data_file = open(yolo_data_filename, 'w')
                 yolo_data_file.write(content)
+
+                out_image_filename = "{}/{}.{}".format(out_folder, img[0]['id'], img[0]['file_name'].split('.')[-1])
+                in_image_filename = os.path.join(args.image_folder, file_name)
+                os.symlink(os.path.relpath(in_image_filename, out_folder), out_image_filename)
