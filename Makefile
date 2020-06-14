@@ -1,5 +1,5 @@
 # author: liangchen (https://cs.lcsky.org)
-.PHONY: all train inference validation data install convert pb
+.PHONY: all train inference validation data install pb
 
 # 数据集 | dataset
 DATA=datasets/coco2017
@@ -14,7 +14,7 @@ CLS=cat dog
 # 训练多少代（看整个训练集多少次） | epochs
 EPOCHS=100
 # 模型通道数量缩放倍数(0.125, 0.25, 0.5, 1.0) | channel number scale factor(0.125, 0.25, 0.5, 1.0)
-NANO=0.125
+NANO=0.25
 # PRETRAIN=yolov4.conv.137
 # 训练结果 | folder to put the trained model
 RESULTS=results
@@ -134,6 +134,3 @@ pb:
 	cd $(RESULTS)/$(VERSION_YOLO) && cat yolov4.cfg | awk -F "[=]" '{if ($$1=="anchors ") print($$2)}' > anchors.txt
 	cd $(RESULTS)/$(VERSION_YOLO) && CUDA_VISIBLE_DEVICES= python3 ../../src/keras-yolo4-converter/convert.py --alpha $(NANO) --model_path yolov4_best.weights --anchors_path anchors.txt --classes_path coco.names --output_layer_file outputs.txt -o yolov4_best.h5
 	# cd $(RESULTS)/$(VERSION_YOLO) && CUDA_VISIBLE_DEVICES= python3 ../../src/keras-yolo4-converter/test.py --alpha $(NANO) --model_path yolov4_best.h5 --anchors_path anchors.txt --classes_path coco.names
-
-convert: pb
-	cd $(RESULTS)/$(VERSION_YOLO) && bash -c "source ~/vsenv/bin/activate && CUDA_VISIBLE_DEVICES= python3 ~/vsenv/lib/python3.6/site-packages/ncsdk/mvNCCompile.py yolov4_best.pb -in input_1 -on `cat outputs.txt` --ma2480 -s 2 -o $(VERSION_YOLO).blob -i $(shell cat $(YOLO_DATA)/val.txt|head -n 1) | grep stage > convert.txt"

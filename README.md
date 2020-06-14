@@ -40,7 +40,7 @@ datasets/
 
 CLS=cat dog
 
-默认模型通道缩放比例NANO=0.125，weights文件大小仅3.9MB，推理速度比原版快4~6倍，自己改动Makefile的第17行，选择合适的缩放比例，详细数据请参考[这里](https://cs.lcsky.org/?p=342)。
+默认模型通道缩放比例NANO=0.25，weights文件大小仅16MB，推理速度比原版快3~4倍，自己改动Makefile的第17行，选择合适的缩放比例，详细数据请参考[这里](https://cs.lcsky.org/?p=342)。
 
 ``` sh
 # 如果你改动过CLS，需要重新运行：
@@ -103,7 +103,7 @@ The default detection classes is cat and dog, if you want train the model to det
 
 CLS=cat dog
 
-The default channel multiplier factor NANO=0.125, the size of weights file is only 3.9MB, and the inference speed is 4~6x faster than the original YOLOv4, modify line 17 of the Makefile to choose the factor. For more experiments data please reference [here](https://cs.lcsky.org/?p=342).
+The default channel multiplier factor NANO=0.25, the size of weights file is only 16MB, and the inference speed is 3~4x faster than the original YOLOv4, modify line 17 of the Makefile to choose the factor. For more experiments data please reference [here](https://cs.lcsky.org/?p=342).
 
 ``` sh
 # if you changed the CLS value in Makefile, you need to run this again:
