@@ -38,7 +38,7 @@ datasets/
 ## 训练模型
 默认的检测类别是😺和🐶，如果你想训练自己的类别，自己改动Makefile的第9行：
 
-CLS="cat" "dog"
+CLS=cat,dog
 
 默认模型通道缩放比例NANO=0.25，weights文件大小仅16MB，推理速度比原版快3~4倍，自己改动Makefile的第17行，选择合适的缩放比例，详细数据请参考[这里](https://cs.lcsky.org/?p=342)。
 
@@ -101,7 +101,7 @@ datasets/
 ## Train the model
 The default detection classes is cat and dog, if you want train the model to detect other target, modify line 9 of the Makefile
 
-CLS="cat" "dog"
+CLS=cat,dog
 
 The default channel multiplier factor NANO=0.25, the size of weights file is only 16MB, and the inference speed is 3~4x faster than the original YOLOv4, modify line 17 of the Makefile to choose the factor. For more experiments data please reference [here](https://cs.lcsky.org/?p=342).
 

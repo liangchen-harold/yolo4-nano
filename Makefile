@@ -6,13 +6,13 @@ DATA=datasets/coco2017
 # DATA=datasets/widerface
 # DATA=datasets/CCPD2019
 # 需要检测的目标类别 | The categories you want
-# CLS="person" "bicycle" "car" "motorbike" "aeroplane" "bus" "train" "truck" "boat" "traffic light" "fire hydrant" "stop sign" "parking meter" "bench" "bird" "cat" "dog" "horse" "sheep" "cow" "elephant" "bear" "zebra" "giraffe" "backpack" "umbrella" "handbag" "tie" "suitcase" "frisbee" "skis" "snowboard" "sports ball" "kite" "baseball bat" "baseball glove" "skateboard" "surfboard" "tennis racket" "bottle" "wine glass" "cup" "fork" "knife" "spoon" "bowl" "banana" "apple" "sandwich" "orange" "broccoli" "carrot" "hot dog" "pizza" "donut" "cake" "chair" "sofa" "pottedplant" "bed" "diningtable" "toilet" "tvmonitor" "laptop" "mouse" "remote" "keyboard" "cell phone" "microwave" "oven" "toaster" "sink" "refrigerator" "book" "clock" "vase" "scissors" "teddy bear" "hair drier" "toothbrush"
+# CLS=person,bicycle,car,motorbike,aeroplane,bus,train,truck,boat,traffic light,fire hydrant,stop sign,parking meter,bench,bird,cat,dog,horse,sheep,cow,elephant,bear,zebra,giraffe,backpack,umbrella,handbag,tie,suitcase,frisbee,skis,snowboard,sports ball,kite,baseball bat,baseball glove,skateboard,surfboard,tennis racket,bottle,wine glass,cup,fork,knife,spoon,bowl,banana,apple,sandwich,orange,broccoli,carrot,hot dog,pizza,donut,cake,chair,sofa,pottedplant,bed,diningtable,toilet,tvmonitor,laptop,mouse,remote,keyboard,cell phone,microwave,oven,toaster,sink,refrigerator,book,clock,vase,scissors,teddy bear,hair drier,toothbrush
 # CLS_DISPLAY=all
-CLS="cat" "dog"
-# CLS="person" "cat" "dog"
-# CLS="bicycle" "car" "motorcycle" "bus" "train" "truck"
-# CLS="face"
-# CLS="plate"
+CLS=cat,dog
+# CLS=person,cat,dog
+# CLS=bicycle,car,motorcycle,bus,train,truck
+# CLS=face
+# CLS=plate
 # 训练多少代（看整个训练集多少次） | epochs
 EPOCHS=100
 # 模型通道数量缩放倍数(0.125, 0.25, 0.5, 1.0) | channel number scale factor(0.125, 0.25, 0.5, 1.0)
@@ -24,8 +24,8 @@ INFERENCE_FILE=test.mp4
 
 # 内部变量 | internal use
 CLS_DISPLAY?=$(CLS)
-_CLS=`echo $(CLS_DISPLAY) | tr ' ' '-'`
-N_CLS=`echo $(CLS) | tr ' ' '\n' | wc -l`
+_CLS=`echo $(CLS_DISPLAY) | tr ' ' '_' | tr ',' '-'`
+N_CLS=`echo $(CLS) | tr ' ' '_' | tr ',' '\n' | wc -l`
 _NANO=`echo $(NANO) | tr -d '.'`
 YOLO_DATA=stage/$(notdir $(DATA))-$(_CLS)
 
@@ -54,8 +54,8 @@ data:
 	rm -rf $(YOLO_DATA)
 
 ifeq ($(notdir $(DATA)),coco2017)
-	python3 src/datasets/coco.py --cls $(CLS) --out $(YOLO_DATA)/train --image_folder $(DATA)/images/train2017 --json $(DATA)/annotations/instances_train2017.json
-	python3 src/datasets/coco.py --cls $(CLS) --out $(YOLO_DATA)/val --image_folder $(DATA)/images/val2017 --json $(DATA)/annotations/instances_val2017.json
+	python3 src/datasets/coco.py --cls "$(CLS)" --out $(YOLO_DATA)/train --image_folder $(DATA)/images/train2017 --json $(DATA)/annotations/instances_train2017.json
+	python3 src/datasets/coco.py --cls "$(CLS)" --out $(YOLO_DATA)/val --image_folder $(DATA)/images/val2017 --json $(DATA)/annotations/instances_val2017.json
 endif
 ifeq ($(notdir $(DATA)),widerface)
 	python3 src/datasets/widerface.py --out $(YOLO_DATA)/train --images $(DATA)/WIDER_train/images --mat $(DATA)/wider_face_split/wider_face_train.mat
@@ -65,8 +65,8 @@ ifeq ($(notdir $(DATA)),CCPD2019)
 	python3 src/datasets/ccpd2coco.py --input $(DATA)/splits/train.txt --output $(YOLO_DATA)/train.json
 	python3 src/datasets/ccpd2coco.py --input $(DATA)/splits/val.txt --output $(YOLO_DATA)/val.json
 
-	python3 src/datasets/coco.py --cls $(CLS) --out $(YOLO_DATA)/train --image_folder $(DATA) --json $(YOLO_DATA)/train.json
-	python3 src/datasets/coco.py --cls $(CLS) --skip 50 --out $(YOLO_DATA)/val --image_folder $(DATA) --json $(YOLO_DATA)/val.json
+	python3 src/datasets/coco.py --cls "$(CLS)" --out $(YOLO_DATA)/train --image_folder $(DATA) --json $(YOLO_DATA)/train.json
+	python3 src/datasets/coco.py --cls "$(CLS)" --skip 50 --out $(YOLO_DATA)/val --image_folder $(DATA) --json $(YOLO_DATA)/val.json
 endif
 
 	ls $(YOLO_DATA)/val/|grep txt| awk '{split($$1,a,"."); printf("%s%s.jpg\n", "'../../$(YOLO_DATA)/val/'", a[1])}' > $(YOLO_DATA)/val.txt
@@ -80,7 +80,7 @@ train:
 	names  = ../../$(RESULTS)/$(VERSION_YOLO)/coco.names\n\
 	backup = ../../$(RESULTS)/$(VERSION_YOLO)\n\
 	eval   = coco" > $(RESULTS)/$(VERSION_YOLO)/coco.data
-	echo $(CLS) | tr ' ' '\n' > $(RESULTS)/$(VERSION_YOLO)/coco.names
+	echo $(CLS) | tr ',' '\n' > $(RESULTS)/$(VERSION_YOLO)/coco.names
 
 ifneq ($(NANO),)
 	cat darknet/cfg/yolov4.cfg | \

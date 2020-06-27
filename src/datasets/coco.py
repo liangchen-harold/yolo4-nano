@@ -9,7 +9,7 @@ if __name__ == "__main__":
     parser.add_argument("--json", help = "Path to instances_train2017.json or instances_val2017.json")
     parser.add_argument("--image_folder", help = "Path to original image folder")
     parser.add_argument("--out", default = "", help = "The output folder")
-    parser.add_argument("--cls", nargs='*', type=str, default=['cat'], help = "The catalogues you want")
+    parser.add_argument("--cls", type=str, default='cat', help = "The catalogues you want")
     parser.add_argument("--skip", nargs='*', type=int, default=[], help = "The skip count per catalogues")
 
     args = parser.parse_args()
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # COCO api
     coco = COCO(coco_json_path)
 
-    cat_ids = coco.getCatIds(catNms=args.cls)
+    cat_ids = coco.getCatIds(catNms=args.cls.split(','))
     img_ids = []
     for i, cat_id in enumerate(cat_ids):
         ids = coco.getImgIds(catIds=[cat_id])
