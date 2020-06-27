@@ -6,11 +6,13 @@ DATA=datasets/coco2017
 # DATA=datasets/widerface
 # DATA=datasets/CCPD2019
 # 需要检测的目标类别 | The categories you want
-CLS=cat dog
-# CLS=person cat dog
-# CLS=bicycle car motorcycle bus train truck
-# CLS=face
-# CLS=plate
+# CLS="person" "bicycle" "car" "motorbike" "aeroplane" "bus" "train" "truck" "boat" "traffic light" "fire hydrant" "stop sign" "parking meter" "bench" "bird" "cat" "dog" "horse" "sheep" "cow" "elephant" "bear" "zebra" "giraffe" "backpack" "umbrella" "handbag" "tie" "suitcase" "frisbee" "skis" "snowboard" "sports ball" "kite" "baseball bat" "baseball glove" "skateboard" "surfboard" "tennis racket" "bottle" "wine glass" "cup" "fork" "knife" "spoon" "bowl" "banana" "apple" "sandwich" "orange" "broccoli" "carrot" "hot dog" "pizza" "donut" "cake" "chair" "sofa" "pottedplant" "bed" "diningtable" "toilet" "tvmonitor" "laptop" "mouse" "remote" "keyboard" "cell phone" "microwave" "oven" "toaster" "sink" "refrigerator" "book" "clock" "vase" "scissors" "teddy bear" "hair drier" "toothbrush"
+# CLS_DISPLAY=all
+CLS="cat" "dog"
+# CLS="person" "cat" "dog"
+# CLS="bicycle" "car" "motorcycle" "bus" "train" "truck"
+# CLS="face"
+# CLS="plate"
 # 训练多少代（看整个训练集多少次） | epochs
 EPOCHS=100
 # 模型通道数量缩放倍数(0.125, 0.25, 0.5, 1.0) | channel number scale factor(0.125, 0.25, 0.5, 1.0)
@@ -21,7 +23,8 @@ RESULTS=results
 INFERENCE_FILE=test.mp4
 
 # 内部变量 | internal use
-_CLS=`echo $(CLS) | tr ' ' '-'`
+CLS_DISPLAY?=$(CLS)
+_CLS=`echo $(CLS_DISPLAY) | tr ' ' '-'`
 N_CLS=`echo $(CLS) | tr ' ' '\n' | wc -l`
 _NANO=`echo $(NANO) | tr -d '.'`
 YOLO_DATA=stage/$(notdir $(DATA))-$(_CLS)

@@ -13,6 +13,7 @@ if __name__ == "__main__":
     parser.add_argument("--skip", nargs='*', type=int, default=[], help = "The skip count per catalogues")
 
     args = parser.parse_args()
+    print(args)
     coco_json_path = args.json
     if not os.path.exists(coco_json_path):
         print ("{} does not exist!".format(coco_json_path))
@@ -33,7 +34,7 @@ if __name__ == "__main__":
         if (len(args.skip) > i):
             ids = ids[::args.skip[i]]
         img_ids += ids
-        print(img_ids)
+        # print(img_ids)
     img_ids = list(set(img_ids))
     for img_id in img_ids:
         # image path
