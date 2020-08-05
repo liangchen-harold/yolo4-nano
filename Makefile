@@ -46,9 +46,8 @@ install:
 	cd darknet && sed -i 's/cmake_minimum_required(VERSION 3.12)/cmake_minimum_required(VERSION 3.8)/g' CMakeLists.txt
 	cd darknet && sed -i 's/find_package(OpenMP)/# find_package(OpenMP)/g' CMakeLists.txt
 	cd darknet && mkdir build-release
-	cd darknet && cd build-release
-	cd darknet && cmake ..
-	cd darknet && make -j6
+	cd darknet/build-release && cmake ..
+	cd darknet/build-release && make -j6
 
 data:
 	rm -rf $(YOLO_DATA)
